@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace GhostscriptSharp
 {
@@ -32,6 +34,17 @@ namespace GhostscriptSharp
 		};
 		#endregion
 
+
+        public static int GetNumberOfPdfPages(string fileName)
+        {
+            using (StreamReader sr = new StreamReader(File.OpenRead(fileName)))
+            {
+                Regex regex = new Regex(@"/Type\s*/Page[^s]");
+                MatchCollection matches = regex.Matches(sr.ReadToEnd());
+
+                return matches.Count;
+            }
+        }
 
 		/// <summary>
 		/// Generates a thumbnail jpg for the pdf at the input path and saves it 

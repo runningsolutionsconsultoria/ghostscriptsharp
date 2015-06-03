@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using GhostscriptSharp;
 using System.IO;
+using System.Drawing;
 
 namespace GhostscriptSharpTests
 {
@@ -15,9 +16,17 @@ namespace GhostscriptSharpTests
         private readonly int MULTIPLE_FILE_PAGE_COUNT = 10;
 
         [Test]
+        public void GetNumberOfPdfPages() {
+           int pages =  GhostscriptWrapper.GetNumberOfPdfPages(TEST_FILE_LOCATION);
+           Assert.AreEqual(99, pages);
+        }
+
+        [Test]
         public void GenerateSinglePageThumbnail()
         {
-            GhostscriptWrapper.GeneratePageThumb(TEST_FILE_LOCATION, SINGLE_FILE_LOCATION, 1, 100, 100);
+            Graphics graphics = Graphics.FromHwnd(IntPtr.Zero);
+
+            GhostscriptWrapper.GeneratePageThumb(TEST_FILE_LOCATION, SINGLE_FILE_LOCATION, 1, 132, 132);
             Assert.IsTrue(File.Exists(SINGLE_FILE_LOCATION));
         }
 
