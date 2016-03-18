@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Text.RegularExpressions;
+using iTextSharp.text.pdf;
 
 namespace GhostscriptSharp
 {
@@ -37,13 +38,24 @@ namespace GhostscriptSharp
 
         public static int GetNumberOfPdfPages(string fileName)
         {
-            using (StreamReader sr = new StreamReader(File.OpenRead(fileName)))
-            {
-                Regex regex = new Regex(@"/Type\s*/Page[^s]");
-                MatchCollection matches = regex.Matches(sr.ReadToEnd());
 
-                return matches.Count;
+            try
+            {
+                using(var pReader = new PdfReader(@"C:\Users\glauco.basilio.RUNNINGBARRA\Desktop\VAs Trade.PDF") ){
+                    return pReader.NumberOfPages;
+                }
             }
+            catch 
+            {
+                using (StreamReader sr = new StreamReader(File.OpenRead(fileName)))
+                {
+                    Regex regex = new Regex(@"/Type\s*/Page[^s]");
+                    MatchCollection matches = regex.Matches(sr.ReadToEnd());
+
+                    return matches.Count;
+                }    
+            }
+            
         }
 
 		/// <summary>
